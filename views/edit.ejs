@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit User</title>
+</head>
+<body>
+  <h1>Edit User</h1>
+
+  <form action="/edit/<%= user.id %>" method="post" onsubmit="return validateForm()">
+    <label for="name">User Name:</label>
+    <input type="text" name="name" value="<%= user.name %>" required>
+
+    <label for="weight">Weight:</label>
+    <input type="number" name="weight" value="<%= user.weight %>" required pattern="\d+(\.\d{1,2})?">
+
+    <label for="height">Height :</label>
+    <input type="number" name="height" value="<%= user.height %>"  required pattern="\d+(\.\d{1,2})?">
+
+    <button type="submit">Update User</button>
+  </form>
+
+  <script>
+
+    function validateForm() {
+        const nameInput = document.querySelector('input[name="name"]');
+      const weightInput = document.querySelector('input[name="weight"]');
+      const heightInput = document.querySelector('input[name="height"]');
+      
+      if (nameInput.value.trim() === '') {
+        alert('Name cannot be empty.');
+        return false;
+      }
+
+
+      const weightValue = parseFloat(weightInput.value);
+      if (isNaN(weightValue) || weightValue < 0) {
+        alert('Weight must be a valid non-negative number.');
+        return false;
+      }
+
+      const heightValue = parseFloat(heightInput.value);
+      if (isNaN(heightValue) || heightValue < 0) {
+        alert('Height must be a valid non-negative number.');
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>

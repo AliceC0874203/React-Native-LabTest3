@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      margin: 20px;
+    }
+    label, input, button {
+      margin: 10px 0;
+    }
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>BMI</h1>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Weight</th>
+      <th>Height</th>
+      <th>BMI</th>
+      <th>Status</th>
+      <th>Message</th>
+      <th>Time</th>
+      <th>Actions</th>
+    </tr>
+    <% Users.forEach(user => { %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.name %></td>
+        <td><%= user.weight %></td>
+        <td><%= user.height %></td>
+        <td><%= user.bmi %></td>
+        <td><%= user.status %></td>
+        <td><%= user.message %></td>
+        <td><%= user.timestamp %></td>
+        <td>
+          <a href="/edit/<%= user.id %>">Edit</a>
+          <a href="#" onclick="confirmDelete('<%= user.id %>')">Delete</a>
+        </td>
+      </tr>
+    <% }); %>
+  </table>
+
+  <form action="/add" method="post" onsubmit="return validateForm()">
+    <label for="name">User Name:</label>
+    <input type="text" name="name" required>
+
+    <label for="weight">Weight:</label>
+    <input type="number" name="weight" required pattern="\d+(\.\d{1,2})?">
+
+    <label for="height">Height :</label>
+    <input type="number" name="height" required pattern="\d+(\.\d{1,2})?">
+
+    <button type="submit">Add User</button>
+  </form>
+  
+  <script>
+    function confirmDelete(userId) {
+      const confirmation = confirm('Are you sure you want to delete this user?');
+      if (confirmation) {
+        window.location.href = '/delete/' + userId;
+      }
+    }
+
+    function validateForm() {
+      const nameInput = document.querySelector('input[name="name"]');
+      const weightInput = document.querySelector('input[name="weight"]');
+      const heightInput = document.querySelector('input[name="height"]');
+      
+      if (nameInput.value.trim() === '') {
+        alert('Name cannot be empty.');
+        return false;
+      }
+
+      const weightValue = parseFloat(weightInput.value);
+      if (isNaN(weightValue) || weightValue < 0) {
+        alert('Weight must be a valid non-negative number.');
+        return false;
+      }
+
+      const heightValue = parseFloat(heightInput.value);
+      if (isNaN(heightValue) || heightValue < 0) {
+        alert('Height must be a valid non-negative number.');
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
